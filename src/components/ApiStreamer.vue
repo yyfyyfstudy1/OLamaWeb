@@ -24,7 +24,7 @@ export default {
             this.loading = true;
             const self = this;  // 保存 'this' 的引用
 
-            fetch('/rpg/api/generate', {
+            fetch('https://effe-122-151-149-14.ngrok-free.app', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
