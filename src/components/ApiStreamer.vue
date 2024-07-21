@@ -24,7 +24,7 @@ export default {
             this.loading = true;
             const self = this;  // 保存 'this' 的引用
 
-            fetch('https://f38c-122-151-149-14.ngrok-free.app/lama', {
+            fetch('https://3896-122-151-149-14.ngrok-free.app/lama', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -34,21 +34,30 @@ export default {
                     prompt: this.prompt
                 })
             }).then(response => {
+                let receivedData = '';
                 const reader = response.body.getReader();
                 function push() {
                     reader.read().then(({ done, value }) => {
                         if (done) {
                             self.loading = false;  // 结束加载状态
+                            try {
+                                // 尝试分割接收到的整个数据流，并解析每个独立的 JSON 对象
+                                receivedData.split("}\n{").forEach((jsonStr, index, array) => {
+                                    // 修正因分割导致的不完整 JSON 字符串
+                                    if (index > 0) { jsonStr = "{" + jsonStr; }
+                                    if (index < array.length - 1) { jsonStr += "}"; }
+                                    if (jsonStr.trim()) {
+                                        const result = JSON.parse(jsonStr);
+                                        self.responses.push(result);  // 处理每个解析后的对象
+                                        self.completeResponse += result.response;  // 拼接响应
+                                    }
+                                });
+                            } catch (e) {
+                                console.error('JSON parse error at the end of the stream:', e);
+                            }
                             return;
                         }
-                        const chunk = new TextDecoder("utf-8").decode(value);
-                        try {
-                            const result = JSON.parse(chunk);
-                            self.responses.push(result);  // 将整个对象存储（可选）
-                            self.completeResponse += result.response;  // 拼接响应
-                        } catch (e) {
-                            console.error('JSON parse error:', e);
-                        }
+                        receivedData += new TextDecoder("utf-8").decode(value);
                         push();  // 继续读取下一个数据块
                     }).catch(error => {
                         console.error('Stream reading error:', error);
@@ -60,6 +69,8 @@ export default {
                 console.error('Fetch error:', error);
                 self.loading = false;
             });
+
+
         }
     }
 };
