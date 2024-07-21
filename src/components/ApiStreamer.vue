@@ -24,7 +24,7 @@ export default {
             this.loading = true;
             const self = this;  // 保存 'this' 的引用
 
-            fetch('https://3896-122-151-149-14.ngrok-free.app/lama', {
+            fetch('https://bdd8-122-151-149-14.ngrok-free.app/api/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
