@@ -10,7 +10,7 @@ module.exports = {
     client: {
       webSocketURL: {
         protocol: 'wss',
-        hostname: '97ce-122-151-149-14.ngrok-free.app',  // 使用 ngrok 提供的域名，不含协议前缀
+        hostname: '21f5-122-151-149-14.ngrok-free.app',  // 使用 ngrok 提供的域名，不含协议前缀
         port: 443  // HTTPS 端口
       }
     },

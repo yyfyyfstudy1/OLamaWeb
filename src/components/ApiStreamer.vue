@@ -24,16 +24,18 @@ export default {
             this.loading = true;
             const self = this;  // 保存 'this' 的引用
 
-            fetch('https://ddc0-122-151-149-14.ngrok-free.app/lama/api/generate', {
+            fetch('https://21f5-122-151-149-14.ngrok-free.app/lama/api/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     model: "llama3",
-                    prompt: this.prompt
+                    prompt: this.prompt,
+                    stream: true
                 })
             }).then(response => {
+                console.log(response)
                 let receivedData = '';
                 const reader = response.body.getReader();
                 function push() {
